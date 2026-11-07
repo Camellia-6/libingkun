@@ -1,0 +1,192 @@
+/* Natural West Lake: warm paper, ink, restrained terracotta and visible scenery. */
+.compact{--ink:#172b24;--muted:#46594e;--accent:#93492f;--paper:#f7f5eb;--line:#314d3933;background:#e6e8dc;color:var(--ink)}
+.site-backdrop{filter:none;background-position:center 62%}
+.site-backdrop::after{background:#fbf8ec08}
+.compact .site-header{background:#f7f6edf2}
+.compact-hero{background:#f8f6eab3;border-color:#62715b55}
+.section-shell{background:#f8f6ebc9;border-color:#64735c55}
+.compact .compact-stats{background:#19221f;border-block:1px solid #101814;color:#faf8ef}
+.compact-stats>a{border-color:#e8eee432}
+.compact-stats strong,.compact-stats a>span{color:#faf8ef}
+.compact .button-dark{background:#20332a;color:#fffdf3}
+.compact .button-dark:hover{background:#15271f}
+.resume-lane{background:#fbfaf3f2}
+.portfolio-card{background:#fcfbf4ed}
+.project-sheet::backdrop,.zoom-dialog::backdrop{background:#14241dcc;backdrop-filter:blur(6px)}
+.project-links>a[href*="wikimedia"],.project-links>a[href*="creativecommons"],.project-links>a[href*="tencent.com"]{font-size:10px;color:#657264}
+.compact .site-footer{background:#f7f5ebc4}
+.compact .reading-progress{background:#718570}
+.portfolio-cover>img[src$="tencent-brand-building.webp"],.project-gallery img[src$="tencent-brand-building.webp"]{object-position:center 87%}
+.portfolio-cover>img[src$="qianpian-live-interface.webp"],.project-gallery img[src$="qianpian-live-interface.webp"]{object-position:center 12%}
+.portfolio-cover>img[src$="tencent-selected-sign.webp"],.project-gallery img[src$="tencent-selected-sign.webp"]{object-position:center 30%}
+.case-page .case-main{background:#f8f6ebd4;border:1px solid #64735c55;padding:32px;margin-block:30px 20px}
+.case-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:32px}
+@media(max-width:760px){.case-page .case-main{padding:23px 18px}.case-actions .button{min-height:48px}}
+@media(max-width:760px){.compact-hero{background:#f8f6eac7}.section-shell{background:#f8f6ebd4}.compact .site-header{background:#f7f6edf5}}
+
+.lane-entries {
+  overflow-anchor: none;
+}
+
+.resume-entry[open] .entry-description {
+  animation: resume-arrive .45s var(--ease) both;
+}
+
+@keyframes resume-arrive {
+  from { opacity: .35; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.education-detail {
+  min-width: min(100%, 260px);
+}
+
+.education-detail summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 44px;
+  padding: 8px 13px;
+  border: 1px solid var(--line);
+  background: #fcfbf2;
+  color: var(--ink);
+  font-size: 14px;
+  text-align: left;
+}
+
+.education-detail summary::-webkit-details-marker { display: none; }
+.education-detail summary:hover { background: #eeeee1; }
+.education-detail p { font-size: 13px; }
+.education-toggle::before { content: "＋"; }
+.education-detail[open] .education-toggle::before { content: "−"; }
+
+.portfolio-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.portfolio-copy > strong { margin-top: 0; }
+
+.portfolio-cover.award-frame > img { object-position: center 53%; }
+.portfolio-cover.hackathon-frame > img { object-position: center 27%; }
+.portfolio-cover.speech-frame > img { object-position: center 35%; }
+.portfolio-cover > img[src$="wenwang-event.webp"] { object-position: center 55%; }
+
+.portfolio-card.has-card-link:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+}
+
+.has-card-link > .portfolio-open {
+  height: auto;
+  flex: 1;
+}
+
+.card-external-link {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 16px;
+  border-top: 1px solid var(--line);
+  color: #284e3b;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.card-external-link:hover { background: #eeeee1; }
+
+.cover-award {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  z-index: 2;
+  padding: 3px 8px;
+  background: #fff7de;
+  color: #62451e;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.cover-open { z-index: 2; }
+
+.portfolio-cover::before,
+.portfolio-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.portfolio-cover::before {
+  background: linear-gradient(115deg, #132b2122, #132b2100 74%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  transition: clip-path .58s var(--ease);
+}
+
+.portfolio-cover::after {
+  background: linear-gradient(112deg, transparent 39%, #fff9dc66 48%, #fffcefad 50%, #fff9dc44 52%, transparent 62%);
+  transform: translateX(-115%);
+  transition: transform .66s var(--ease);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .portfolio-card:hover .portfolio-cover::before,
+  .portfolio-open:focus-visible .portfolio-cover::before {
+    clip-path: polygon(100% 0, 100% 0, 100% 100%, 79% 100%);
+  }
+
+  .portfolio-card:hover .portfolio-cover::after,
+  .portfolio-open:focus-visible .portfolio-cover::after {
+    transform: translateX(115%);
+  }
+}
+
+.viewer-toolbar-actions,
+#photo-navigation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.viewer-toolbar-actions .photo-close {
+  position: static;
+  flex: 0 0 40px;
+}
+
+#photo-navigation > button {
+  min-width: 36px;
+  min-height: 36px;
+  border: 1px solid var(--line);
+  font-size: 19px;
+  line-height: 1;
+}
+
+#photo-download {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding-inline: 12px;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+#photo-download:hover { background: #eeeee1; }
+#photo-download[hidden], #photo-navigation[hidden], .single-photo .photo-paging-hint { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .resume-entry[open] .entry-description { animation: none; }
+  .portfolio-card, .portfolio-cover > img { transition: none; }
+  .portfolio-card:hover, .portfolio-card:hover .portfolio-cover > img { transform: none; }
+  .portfolio-cover::after { display: none; }
+}
+
+/* Resume links lead to the existing portfolio card. */
+.portfolio-card { scroll-margin-top: 105px; }
+.portfolio-card.is-linked { outline: 2px solid var(--accent); outline-offset: 5px; }
+.portfolio-card.is-linked .portfolio-cover::after { transform: translateX(115%); }

@@ -1,0 +1,15 @@
+/* Black-to-clear photographic headers; the West Lake page palette stays natural. */
+#lane-ai .lane-heading,#lane-media .lane-heading,#lane-english .lane-heading{min-height:205px;padding:22px 20px 19px;position:relative;overflow:hidden;isolation:isolate;background:#111713;color:#fffaf0}
+.lane-heading>.lane-visual{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 52%;opacity:1;filter:none;pointer-events:none;z-index:0;transition:transform .6s ease}
+.lane-heading::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,#0a100ef2 0%,#0a100ed9 30%,#0a100e91 53%,#0a100e30 73%,#0a100e00 100%)}
+.lane-heading:hover>.lane-visual{transform:scale(1.035)}
+.lane-heading>:not(.lane-visual){position:relative;z-index:2;max-width:100%}
+#lane-ai .lane-heading>span,#lane-media .lane-heading>span,#lane-english .lane-heading>span{display:block;color:#e4e9dc;font-size:8px;line-height:1.65;letter-spacing:.1em}
+.lane-heading h3{color:#fffdf3;font-size:34px;margin-block:9px 7px;text-shadow:0 1px 12px #0003}
+.lane-heading h3>i{font-size:20px;color:#f0f1e8}
+.lane-heading p{max-width:94%;color:#fffdf3;font-weight:650;line-height:1.7;text-shadow:0 1px 6px #0006}
+#lane-ai .lane-heading>strong,#lane-media .lane-heading>strong,#lane-english .lane-heading>strong{color:#f4f3e9;border-color:#e9eee855;line-height:1.6;margin-top:9px;padding-top:7px;text-shadow:0 1px 6px #0006}
+#lane-media .lane-visual{object-position:center 46%}
+#lane-english .lane-visual{object-position:center 44%}
+@media(max-width:760px){#lane-ai .lane-heading,#lane-media .lane-heading,#lane-english .lane-heading{min-height:209px;padding:20px 18px 17px}.lane-heading h3{font-size:32px}}
+@media(prefers-reduced-motion:reduce){.lane-heading>.lane-visual{transition:none}.lane-heading:hover>.lane-visual{transform:none}}

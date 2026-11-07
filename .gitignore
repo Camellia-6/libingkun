@@ -1,0 +1,34 @@
+# Local working material and generated deployment output
+/backup/
+/.netlify/
+/dist/
+/__pycache__/
+*.log
+/.env
+/.env.*
+/frost.css
+/三潭映月.png
+/头像.png
+/源代码.txt
+/素材说明.md
+/验收记录.md
+/配图生成记录.md
+# Unselected images remain local
+/assets/lane-english-editorial.webp
+/assets/photos/alumni-sharing.webp
+/assets/photos/campus.webp
+/assets/photos/community-feedback.webp
+/assets/photos/creative-poster.webp
+/assets/photos/creator-profile.webp
+/assets/photos/hosting-training.webp
+/assets/photos/international-meeting.webp
+/assets/photos/qianpian-workbench.webp
+/assets/photos/research-graph.webp
+/assets/photos/russia-exchange.webp
+/assets/photos/security-watch.webp
+/assets/photos/singapore-exchange.webp
+/assets/photos/singapore-hosting.webp
+/assets/photos/tencent-brand-building.webp
+/assets/photos/tencent-event.webp
+/assets/photos/tencent-seafront-towers.webp
+/assets/photos/wenwang-values.webp
