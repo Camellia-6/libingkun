@@ -190,6 +190,20 @@
 .portfolio-card { scroll-margin-top: 105px; }
 .portfolio-card.is-linked { outline: 2px solid var(--accent); outline-offset: 5px; }
 .portfolio-cover.creator-frame > img { object-fit: cover; object-position: center top; }
+.portfolio-cover.altruism-face > img {
+  width: 160%;
+  max-width: none;
+  margin-left: -58%;
+  object-position: center 35%;
+}
+.portfolio-cover.pku-campus-frame > img { object-position: center 21%; }
+#work-cross-cultural .portfolio-cover > img { object-position: center 22%; }
+.portfolio-cover.security-title-frame { background: #07142d; }
+.portfolio-cover.security-title-frame > img { object-position: center 43%; }
+
+@media (max-width: 760px) {
+  .portfolio-cover.security-title-frame > img { object-fit: contain; }
+}
 
 .work-link-preview {
   position: fixed;
