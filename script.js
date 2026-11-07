@@ -31,6 +31,13 @@
     body.classList.remove('ready');
     intro.classList.remove('leaving');
     intro.hidden = false;
+    filmFrames.forEach(frame => {
+      if (!frame.dataset.src) return;
+      if (frame.dataset.srcset) frame.srcset = frame.dataset.srcset;
+      frame.src = frame.dataset.src;
+      delete frame.dataset.src;
+      delete frame.dataset.srcset;
+    });
     // Restart the letter animation when replaying the opening.
     intro.getAnimations({subtree:true}).forEach(animation => { animation.cancel(); animation.play(); });
     body.classList.add('is-intro');
@@ -193,6 +200,9 @@
   const projectDialog = document.getElementById('project-dialog');
   const photoDialog = document.getElementById('photo-dialog');
   const projectMap = new Map(window.PORTFOLIO_PROJECTS.map(project => [project.id, project]));
+  const coverBySource = new Map(
+    [...document.querySelectorAll('.portfolio-cover img[srcset]')].map(cover => [cover.getAttribute('src'), cover])
+  );
   const workPreview = document.getElementById('work-link-preview');
   const workPreviewImage = workPreview.querySelector('img');
   let previewTrigger, linkedCardTimer;
@@ -204,7 +214,9 @@
     const cover = document.getElementById('work-' + trigger.dataset.project)?.querySelector('.portfolio-cover img');
     if (!cover) return;
     previewTrigger = trigger;
-    workPreviewImage.src = cover.currentSrc || cover.src;
+    workPreviewImage.sizes = '288px';
+    workPreviewImage.srcset = cover.srcset;
+    workPreviewImage.src = cover.src;
     workPreviewImage.style.objectPosition = getComputedStyle(cover).objectPosition;
     const rect = trigger.getBoundingClientRect();
     const {offsetWidth:width, offsetHeight:height} = workPreview;
@@ -274,7 +286,16 @@
     project.photos.forEach((photo, index) => {
       const trigger = document.createElement('button'); trigger.type = 'button'; trigger.dataset.photoIndex = index;
       trigger.setAttribute('aria-label', '放大查看：' + photo.title);
-      const image = document.createElement('img'); image.src = photo.src; image.alt = photo.title;
+      const image = document.createElement('img');
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      const cover = coverBySource.get(photo.src);
+      if (cover) {
+        image.sizes = '(max-width: 760px) 43vw, 260px';
+        image.srcset = cover.srcset;
+      }
+      image.src = photo.src;
+      image.alt = photo.title;
       const label = document.createElement('span'); label.textContent = photo.title;
       trigger.append(image,label); gallery.append(trigger);
     });
