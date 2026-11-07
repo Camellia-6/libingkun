@@ -193,7 +193,35 @@
   const projectDialog = document.getElementById('project-dialog');
   const photoDialog = document.getElementById('photo-dialog');
   const projectMap = new Map(window.PORTFOLIO_PROJECTS.map(project => [project.id, project]));
-  let linkedCardTimer;
+  const workPreview = document.getElementById('work-link-preview');
+  const workPreviewImage = workPreview.querySelector('img');
+  let previewLink, linkedCardTimer, arrivalObserver;
+  function hideWorkPreview() {
+    workPreview.classList.remove('is-visible');
+    previewLink = null;
+  }
+  function showWorkPreview(link) {
+    const cover = document.getElementById('work-' + link.dataset.work)?.querySelector('.portfolio-cover img');
+    if (!cover) return;
+    previewLink = link;
+    workPreviewImage.src = cover.currentSrc || cover.src;
+    workPreviewImage.style.objectPosition = getComputedStyle(cover).objectPosition;
+    const rect = link.getBoundingClientRect();
+    const {offsetWidth:width, offsetHeight:height} = workPreview;
+    const edge = 12, gap = 14;
+    let left = rect.right + gap, top = rect.top + (rect.height - height) / 2;
+    if (left + width > innerWidth - edge) {
+      left = rect.left - width - gap;
+      if (left < edge) {
+        left = rect.left;
+        top = rect.bottom + gap + height <= innerHeight - edge
+          ? rect.bottom + gap : rect.top - height - gap;
+      }
+    }
+    workPreview.style.left = Math.max(edge, Math.min(left, innerWidth - width - edge)) + 'px';
+    workPreview.style.top = Math.max(edge, Math.min(top, innerHeight - height - edge)) + 'px';
+    workPreview.classList.add('is-visible');
+  }
   function revealLinkedWork(hash, moveFocus = false) {
     const card = cards.find(item => '#' + item.id === hash);
     if (!card) return;
@@ -203,19 +231,52 @@
       filterProjects();
     }
     clearTimeout(linkedCardTimer);
-    cards.forEach(item => item.classList.toggle('is-linked', item === card));
+    arrivalObserver?.disconnect();
+    cards.forEach(item => {
+      item.classList.toggle('is-linked', item === card);
+      item.classList.remove('is-arriving');
+    });
     requestAnimationFrame(() => {
       card.scrollIntoView({behavior:reduced.matches ? 'instant' : 'smooth', block:'start'});
       if (moveFocus) card.querySelector('.portfolio-open').focus({preventScroll:true});
     });
-    linkedCardTimer = setTimeout(() => card.classList.remove('is-linked'), 3500);
+    if (moveFocus && !reduced.matches) {
+      arrivalObserver = new IntersectionObserver(([entry], observer) => {
+        if (entry.intersectionRatio < .55) return;
+        card.classList.add('is-arriving');
+        observer.disconnect();
+      }, {threshold: .55});
+      arrivalObserver.observe(card);
+    }
+    linkedCardTimer = setTimeout(() => {
+      arrivalObserver?.disconnect();
+      card.classList.remove('is-linked', 'is-arriving');
+    }, 3500);
   }
-  document.querySelectorAll('[data-work]').forEach(link => link.addEventListener('click', event => {
-    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-    event.preventDefault();
-    if (location.hash !== link.hash) history.pushState(null, '', link.hash);
-    revealLinkedWork(link.hash, true);
-  }));
+  document.querySelectorAll('[data-work]').forEach(link => {
+    link.addEventListener('pointerenter', event => {
+      if (event.pointerType === 'mouse') showWorkPreview(link);
+    });
+    link.addEventListener('pointerleave', () => {
+      if (previewLink === link && !link.matches(':focus-visible')) hideWorkPreview();
+    });
+    link.addEventListener('focus', () => {
+      if (link.matches(':focus-visible')) showWorkPreview(link);
+    });
+    link.addEventListener('blur', hideWorkPreview);
+    link.addEventListener('click', event => {
+      hideWorkPreview();
+      if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      if (location.hash !== link.hash) history.pushState(null, '', link.hash);
+      revealLinkedWork(link.hash, true);
+    });
+  });
+  addEventListener('scroll', hideWorkPreview, {capture:true, passive:true});
+  addEventListener('resize', hideWorkPreview);
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') hideWorkPreview();
+  });
   addEventListener('hashchange', () => revealLinkedWork(location.hash));
   revealLinkedWork(location.hash);
   let activePhotos = [], photoIndex = 0;

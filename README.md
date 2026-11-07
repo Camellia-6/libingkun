@@ -2,7 +2,7 @@
 
 西湖背景与个人影像，呈现 AI 应用、新媒体增长、英语与国际交流的实践。
 
-在线浏览 https://libingkun.netlify.app/
+在线浏览 [GitHub Pages](https://camellia-6.github.io/libingkun/) 或 [Netlify](https://libingkun.netlify.app/)。
 
 精选顺序为抖音万粉博主、抖音校园 WowLand、第四届全球安全治理学术研讨会、广信君达、腾讯传媒研习生、双语演讲比赛。更多作品可按类别浏览。
 

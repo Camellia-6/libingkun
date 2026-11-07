@@ -189,4 +189,55 @@
 /* Resume links lead to the existing portfolio card. */
 .portfolio-card { scroll-margin-top: 105px; }
 .portfolio-card.is-linked { outline: 2px solid var(--accent); outline-offset: 5px; }
-.portfolio-card.is-linked .portfolio-cover::after { transform: translateX(115%); }
+.portfolio-cover.creator-frame > img { object-fit: cover; object-position: center top; }
+
+.work-link-preview {
+  position: fixed;
+  z-index: 110;
+  width: min(288px, calc(100vw - 24px));
+  padding: 5px;
+  background: #fffdf4;
+  border: 1px solid #c9cbb8;
+  box-shadow: 0 16px 40px #16271d50;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(10px) rotate(-3deg) scale(.95);
+  transition: opacity .2s, transform .3s var(--ease), visibility .2s;
+}
+
+.work-link-preview.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) rotate(1.5deg) scale(1);
+}
+
+.work-link-preview img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  background: var(--paper);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .portfolio-card.is-arriving .portfolio-cover > img {
+    animation: work-cover-reveal .8s var(--ease) both;
+  }
+  .portfolio-card.is-arriving .portfolio-cover::after {
+    animation: work-cover-light .85s var(--ease) both;
+  }
+}
+
+@keyframes work-cover-reveal {
+  from { clip-path: polygon(0 0, 63% 0, 41% 100%, 0 100%); transform: scale(1.075); }
+  to { clip-path: polygon(0 0, 120% 0, 100% 100%, 0 100%); transform: scale(1); }
+}
+
+@keyframes work-cover-light {
+  from { transform: translateX(-115%); }
+  to { transform: translateX(115%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-link-preview, .work-link-preview.is-visible { transform: none; transition: none; }
+}
