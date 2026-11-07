@@ -195,18 +195,18 @@
   const projectMap = new Map(window.PORTFOLIO_PROJECTS.map(project => [project.id, project]));
   const workPreview = document.getElementById('work-link-preview');
   const workPreviewImage = workPreview.querySelector('img');
-  let previewLink, linkedCardTimer, arrivalObserver;
+  let previewTrigger, linkedCardTimer;
   function hideWorkPreview() {
     workPreview.classList.remove('is-visible');
-    previewLink = null;
+    previewTrigger = null;
   }
-  function showWorkPreview(link) {
-    const cover = document.getElementById('work-' + link.dataset.work)?.querySelector('.portfolio-cover img');
+  function showWorkPreview(trigger) {
+    const cover = document.getElementById('work-' + trigger.dataset.project)?.querySelector('.portfolio-cover img');
     if (!cover) return;
-    previewLink = link;
+    previewTrigger = trigger;
     workPreviewImage.src = cover.currentSrc || cover.src;
     workPreviewImage.style.objectPosition = getComputedStyle(cover).objectPosition;
-    const rect = link.getBoundingClientRect();
+    const rect = trigger.getBoundingClientRect();
     const {offsetWidth:width, offsetHeight:height} = workPreview;
     const edge = 12, gap = 14;
     let left = rect.right + gap, top = rect.top + (rect.height - height) / 2;
@@ -222,7 +222,7 @@
     workPreview.style.top = Math.max(edge, Math.min(top, innerHeight - height - edge)) + 'px';
     workPreview.classList.add('is-visible');
   }
-  function revealLinkedWork(hash, moveFocus = false) {
+  function revealLinkedWork(hash) {
     const card = cards.find(item => '#' + item.id === hash);
     if (!card) return;
     if (card.hidden) {
@@ -231,46 +231,23 @@
       filterProjects();
     }
     clearTimeout(linkedCardTimer);
-    arrivalObserver?.disconnect();
-    cards.forEach(item => {
-      item.classList.toggle('is-linked', item === card);
-      item.classList.remove('is-arriving');
-    });
+    cards.forEach(item => item.classList.toggle('is-linked', item === card));
     requestAnimationFrame(() => {
       card.scrollIntoView({behavior:reduced.matches ? 'instant' : 'smooth', block:'start'});
-      if (moveFocus) card.querySelector('.portfolio-open').focus({preventScroll:true});
     });
-    if (moveFocus && !reduced.matches) {
-      arrivalObserver = new IntersectionObserver(([entry], observer) => {
-        if (entry.intersectionRatio < .55) return;
-        card.classList.add('is-arriving');
-        observer.disconnect();
-      }, {threshold: .55});
-      arrivalObserver.observe(card);
-    }
-    linkedCardTimer = setTimeout(() => {
-      arrivalObserver?.disconnect();
-      card.classList.remove('is-linked', 'is-arriving');
-    }, 3500);
+    linkedCardTimer = setTimeout(() => card.classList.remove('is-linked'), 3500);
   }
-  document.querySelectorAll('[data-work]').forEach(link => {
-    link.addEventListener('pointerenter', event => {
-      if (event.pointerType === 'mouse') showWorkPreview(link);
+  document.querySelectorAll('.entry-image-link[data-project]').forEach(trigger => {
+    trigger.addEventListener('pointerenter', event => {
+      if (event.pointerType === 'mouse') showWorkPreview(trigger);
     });
-    link.addEventListener('pointerleave', () => {
-      if (previewLink === link && !link.matches(':focus-visible')) hideWorkPreview();
+    trigger.addEventListener('pointerleave', () => {
+      if (previewTrigger === trigger && !trigger.matches(':focus-visible')) hideWorkPreview();
     });
-    link.addEventListener('focus', () => {
-      if (link.matches(':focus-visible')) showWorkPreview(link);
+    trigger.addEventListener('focus', () => {
+      if (trigger.matches(':focus-visible') && !projectDialog.open) showWorkPreview(trigger);
     });
-    link.addEventListener('blur', hideWorkPreview);
-    link.addEventListener('click', event => {
-      hideWorkPreview();
-      if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-      event.preventDefault();
-      if (location.hash !== link.hash) history.pushState(null, '', link.hash);
-      revealLinkedWork(link.hash, true);
-    });
+    trigger.addEventListener('blur', hideWorkPreview);
   });
   addEventListener('scroll', hideWorkPreview, {capture:true, passive:true});
   addEventListener('resize', hideWorkPreview);
@@ -283,6 +260,7 @@
   function unlockDialogs() { body.style.overflow = projectDialog.open || photoDialog.open ? 'hidden' : ''; }
   function closeProject() { projectDialog.close(); unlockDialogs(); }
   document.querySelectorAll('[data-project]').forEach(button => button.addEventListener('click', () => {
+    hideWorkPreview();
     const project = projectMap.get(button.dataset.project);
     document.getElementById('dialog-category').textContent = project.tag;
     document.getElementById('dialog-title').textContent = project.title;
