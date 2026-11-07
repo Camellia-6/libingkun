@@ -344,18 +344,21 @@
     photoDownload.hidden = true;
     openPhoto(Number(trigger.dataset.photoIndex));
   });
-  const documentPreviews = {
+  const singlePhotoPreviews = {
     resume: {src:'assets/resume-preview.png', title:'个人简历', filename:'李炳坤个人简历.pdf'},
-    card: {src:'assets/business-card.png', title:'个人名片', filename:'李炳坤个人名片.png'}
+    card: {src:'assets/business-card.png', title:'个人名片', filename:'李炳坤个人名片.png'},
+    wechat: {src:'assets/wechat-qr.png', title:'微信二维码'}
   };
   document.querySelectorAll('[data-preview]').forEach(link => link.addEventListener('click', event => {
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
-    const preview = documentPreviews[link.dataset.preview];
+    const preview = singlePhotoPreviews[link.dataset.preview];
     activePhotos = [preview];
-    photoDownload.href = link.href;
-    photoDownload.download = preview.filename;
-    photoDownload.hidden = false;
+    photoDownload.hidden = !preview.filename;
+    if (preview.filename) {
+      photoDownload.href = link.href;
+      photoDownload.download = preview.filename;
+    }
     openPhoto(0);
   }));
   function closePhoto() { photoDialog.close();unlockDialogs();touchPoints.clear();dragStart=null;stage.classList.remove('is-panning'); }
